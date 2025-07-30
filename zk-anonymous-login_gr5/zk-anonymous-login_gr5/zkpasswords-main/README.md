@@ -1,113 +1,115 @@
-ZKAuth: Zero-Knowledge Password Authentication
+# ZKAuth: Zero-Knowledge Password Authentication
 
-📋 Mục lục
+ZKAuth là một hệ thống xác thực người dùng dựa trên công nghệ Zero-Knowledge Proof (ZKP), cho phép người dùng chứng minh rằng họ biết một mật khẩu hợp lệ mà không cần gửi mật khẩu hoặc hash đến server. Điều này giúp bảo mật tuyệt đối thông tin đăng nhập, loại bỏ nguy cơ rò rỉ mật khẩu từ phía máy chủ, và là một bước tiến quan trọng trong việc nâng cao quyền riêng tư số.
 
-Giới thiệu
+ZKAuth mang tiềm năng lớn trong các hệ thống cần xác thực an toàn, ví dụ như ví blockchain, hệ thống tài chính, ứng dụng bảo mật doanh nghiệp, và các dịch vụ web đòi hỏi tính bảo mật cao.
 
-Thành viên nhóm
+---
 
-Tóm tắt kỹ thuật
+## Team Information
 
-Demo & Video hướng dẫn
+**Group:** ZKAuth Team
 
-Cấu trúc dự án
+**Members**
 
-Hướng dẫn cài đặt & sử dụng
+- Name: Hà Duy Nhất  
+  - Discord Username: `haduynhat_49827`    
+  - Role: Team Leader
 
-Khuyến nghị bảo mật
+- Name: Phạm Đăng Trình  
+  - Role: Member
 
-License
+- Name: Trương Văn Thịnh  
+  - Role: Member
 
-Giới thiệu
+- Name: Nguyễn Thanh Truyền  
+  - Role: Member
 
-ZKAuth là một hệ thống xác thực mật khẩu an toàn bằng Zero-Knowledge Proof (ZKP). Người dùng có thể chứng minh họ biết mật khẩu hợp lệ mà không tiết lộ mật khẩu đó cho server.
+- Name: Nguyễn Huỳnh Quang  
+  - Role: Member
+  
+- Name: Nguyễn Đại Phát
+  - Role: Member  
+---
 
-Công nghệ chính:
+## Technical Report
 
-Circom: định nghĩa và compile circuit cho ZKP.
+### 🧩 Vấn đề thực tế
 
-SnarkJS + PLONK: thực hiện trusted setup, sinh proof và verify proof.
+Các hệ thống xác thực hiện nay chủ yếu lưu trữ hash mật khẩu hoặc dựa vào server để xác minh mật khẩu. Điều này khiến mật khẩu người dùng có thể bị lộ nếu:
 
-Thành viên nhóm
+- Hash bị rò rỉ hoặc bẻ khóa
+- Máy chủ bị tấn công hoặc có lỗ hổng
+- Giao tiếp giữa client-server bị nghe lén
 
-Leader: Hà Duy Nhất
+### 🧠 Giải pháp đề xuất
 
-Members:
+ZKAuth sử dụng **Zero-Knowledge Proof** để xác thực mật khẩu mà **không cần gửi hay lưu trữ bất kỳ dạng mật khẩu nào**.  
+Quá trình xác minh chỉ dựa vào bằng chứng mật mã do client tạo ra — từ đó:
 
-Phạm Đăng Trình
+- Bảo vệ quyền riêng tư tuyệt đối
+- Hạn chế tối đa các cuộc tấn công từ phía server hoặc mạng
+- Loại bỏ hoàn toàn nhu cầu lưu trữ mật khẩu
 
-Trương Văn Thịnh
+### 🛠️ Thành phần kỹ thuật chính
 
-Nguyễn Thanh Truyền
+- **Circom**: Thiết kế và biên dịch circuit cho mật khẩu.
+- **SnarkJS (PLONK)**: Sinh proof và xác minh proof.
+- **ExpressJS**: Server API xác minh proof.
+- **HTML + JS thuần**: Giao diện người dùng đơn giản, dễ tương tác.
+- **No password/hash storage**: Mỗi lần đăng nhập là một chứng minh mật mã mới (zero-knowledge).
 
-Nguyễn Huỳnh Quang
+---
 
-Nguyễn Đại Phát
+## Project Outcomes and Reflections
 
-Tóm tắt kỹ thuật
+### ✅ **Project Impact and Benefits**
 
-Signup
+- Tăng cường đáng kể bảo mật cho các hệ thống xác thực.
+- Tránh rò rỉ dữ liệu nhạy cảm từ server.
+- Làm tiền đề cho các hệ thống xác thực không cần mật khẩu truyền thống.
 
-Nhúng mật khẩu (chuyển thành số) vào circuit Circom.
+### 💡 **Notable Insights and Experiences**
 
-Biên dịch circuit → R1CS + WASM + SYM.
+- Việc mã hóa mật khẩu dưới dạng field elements để đưa vào circuit là điểm mấu chốt thú vị.
+- Tận dụng `snarkjs.plonk.fullProve()` để sinh proof phía client là một trải nghiệm đặc biệt, giúp client chủ động kiểm soát thông tin.
 
-Thiết lập PLONK trusted setup → tạo circuit_final.zkey.
+### ⚠️ **Challenges Faced**
 
-Xuất verification key ra verification_key.json.
+- Tối ưu hóa circuit để không vượt giới hạn chi phí.
+- Hiểu rõ quá trình trusted setup và cách sinh zkey, đặc biệt là khi áp dụng PLONK.
+- Gặp khó khăn khi chuyển từ `.sh`/`.bat` sang xử lý 100% bằng JS — nhưng đã giải quyết nhờ kiến thức về NodeJS child process & file system.
 
-Login
+### 🔍 **Thoughts on Zero-Knowledge Proofs and Their Applications**
 
-Người dùng nhập mật khẩu.
+ZKP là công nghệ đột phá không chỉ trong lĩnh vực blockchain mà còn trong bảo mật nói chung. Việc xác thực mà không cần tiết lộ dữ liệu thực giúp:
 
-Dùng circuit.wasm + circuit_final.zkey → sinh proof (snarkjs.plonk.fullProve).
+- Tăng quyền riêng tư
+- Hạn chế rò rỉ dữ liệu
+- Mở ra mô hình “đăng nhập không cần mật khẩu”
+- Ứng dụng tiềm năng trong tài chính, y tế, eKYC, voting và metaverse
 
-Đọc publicSignals[0] (1 = đúng, 0 = sai).
+---
 
-Server verify proof bằng verification_key.json.
+## References
 
-Demo & Video hướng dẫn
+- [Circom Docs](https://docs.circom.io/)
+- [SnarkJS GitHub](https://github.com/iden3/snarkjs)
+- [Zero-Knowledge University](https://zku.one/)
+- [zkPassword example (iden3)](https://github.com/iden3/examples)
 
-Video demo tính năng Signup & Login: ./demo.mp4
+---
 
-Link xem trực tuyến: https://www.youtube.com/watch?v=6KJdHLKjJ1U
+## Presentation Slide
 
-Cấu trúc dự án
+👉 Slide PDF: https://www.canva.com/design/DAGuiODynuE/zIcfjy7MPW3GFkqbuzelHw/edit?utm_content=DAGuiODynuE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton  
 
-zkpasswords-main/
-├─ circom/                 # Mã nguồn Circom
-├─ public/                 # Front-end (HTML, JS)
-│   ├─ signup.html
-│   ├─ signup.js
-│   ├─ login.html
-│   ├─ login.js
-│   ├─ home.html
-│   └─ change.html
-├─ zkauth/                 # Module ZKAuth gốc
-│   ├─ setup.sh            # Script tự động build ZKP
-│   ├─ pot14_final.ptau    # Tham số chung PLONK
-│   └─ circuit_final.zkey  # Proving + verification key mẫu
-├─ zkauthaccounts/         # Thư mục lưu artifact cho từng user
-├─ server.js               # Express API
-├─ package.json            # Dependencies & scripts
-└─ README.md               # Tài liệu này
+---
 
-Hướng dẫn cài đặt & sử dụng
+## Video Demo
 
-Cài đặt:
+🎥 YouTube: [https://www.youtube.com/watch?v=6KJdHLKjJ1U](https://www.youtube.com/watch?v=6KJdHLKjJ1U)  
+🕒 Thời lượng: 37 giây
 
-npm install
+---
 
-Chạy server:
-
-node server.js
-
-Mở trình duyệt tại http://localhost:3000/signup để đăng ký, sau đó http://localhost:3000/login để đăng nhập.
-
-Khuyến nghị bảo mật
-
-Sử dụng HTTPS cho môi trường production.
-
-Bảo vệ thư mục zkauthaccounts/ khỏi truy cập trái phép.
-
-Không lưu trữ plaintext hoặc hash mật khẩu.
